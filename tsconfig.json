@@ -20,8 +20,12 @@
     "module": "es2020",
     "lib": [
       "es2020",
-      "dom"
-    ]
+      "dom",
+      "scripthost"
+    ],
+    "allowSyntheticDefaultImports": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
