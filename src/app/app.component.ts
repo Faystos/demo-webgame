@@ -1,36 +1,35 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import { AUTO, Game, Scene, Types } from 'phaser';
+import {
+  AUTO,
+  Game,
+  Types
+} from 'phaser';
 
-import { EScene } from "./types/scene";
+import {
+  GameScene,
+  PreloadScene
+} from "./scenes";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent extends Scene implements OnInit{
+export class AppComponent implements OnInit {
   phaserGame!: Phaser.Game;
   config: Types.Core.GameConfig = {
     parent: 'game-container',
     type: AUTO,
-    width: 800,
-    height: 600,
-    scene: [this]
+    // width: 800,
+    // height: 600,
+    scene: [
+      PreloadScene,
+      GameScene
+    ]
   };
 
-  constructor() {
-    super(EScene.GAME);
-  }
-
   ngOnInit() {
-    this.phaserGame = new Game({ parent: 'game-container' });
+    this.phaserGame = new Game(this.config);
   }
-
-  preload() {}
-
-  create(){}
-
-  override update() {}
-
 }
