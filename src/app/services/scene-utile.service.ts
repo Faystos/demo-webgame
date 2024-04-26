@@ -1,17 +1,16 @@
-import { Scene } from "phaser";
-
-interface IStaticImage {
-  scene: Scene;
-  x: number;
-  y:number;
-  key: string
-}
+import { IImage } from "../types";
 
 class SceneUtilService {
   constructor() {}
-  addStaticImage(objStaticImage: IStaticImage) {
+
+  addStaticImage(objStaticImage: IImage): void {
     const { scene, x, y, key } = objStaticImage;
     scene.add.image(x, y, key).setOrigin(0, 0);
+  }
+
+  addDynamicImage(objStaticImage: IImage): void {
+    const { scene, x, y, key , flip } = objStaticImage;
+    scene.add.image(x, y, key).setFlipX(flip ?? false);
   }
 }
 

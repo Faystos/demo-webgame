@@ -1,17 +1,19 @@
 import { Scene } from "phaser";
 
-import { EScene } from "../types/scene";
 import {
   KeyAssets,
   KeyHealthBar,
   KeyImage,
-  KeyMonster
+  KeyMonster,
+  KeyScene
 } from "../keys";
+import {SceneUtil} from "../services";
 
 export class PreloadScene extends Scene {
+  sceneUtil = SceneUtil;
 
   constructor() {
-    super(EScene.PRELOAD)
+    super(KeyScene.PRELOAD)
   }
 
   preload() {
@@ -19,7 +21,8 @@ export class PreloadScene extends Scene {
   }
 
   create() {
-    this.scene.start(EScene.GAME);
+    this.renderBackground();
+    this.scene.start(KeyScene.BATTLE);
   }
 
   private loadImage() {
@@ -62,5 +65,14 @@ export class PreloadScene extends Scene {
       KeyMonster.IGUANIGNITE,
       `${ KeyAssets.URI_MONSTER_TAMER }monsters/iguanignite.png`
     );
+  }
+
+  private renderBackground() {
+    this.sceneUtil.addStaticImage({
+      scene: this,
+      x: 0,
+      y: 0,
+      key: KeyImage.BG_FOREST
+    });
   }
 }
