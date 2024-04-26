@@ -1,5 +1,5 @@
 export enum KeyMonster {
-  CARNODUSK = 'carnodusk',
-  IGUANIGNITE = 'iguanignite'
+  CARNODUSK = 'CARNODUSK',
+  IGUANIGNITE = 'IGUANIGNITE'
 
 }
