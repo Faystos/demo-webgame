@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
 import {
-  AUTO,
   Game,
-  Types
+  Types,
+  CANVAS,
+  Scale
 } from 'phaser';
 
 import {
@@ -19,10 +20,15 @@ import {
 export class AppComponent implements OnInit {
   phaserGame!: Phaser.Game;
   config: Types.Core.GameConfig = {
-    parent: 'game-container',
-    type: AUTO,
-    // width: 800,
-    // height: 600,
+    type: CANVAS,
+    pixelArt: false,
+    scale: {
+      parent: 'game-container',
+      width: 1024,
+      height: 576,
+      mode: Scale.FIT,
+      autoCenter: Scale.CENTER_BOTH
+    },
     scene: [
       PreloadScene,
       GameScene
