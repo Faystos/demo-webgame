@@ -1,7 +1,9 @@
-import { Scene, GameObjects } from "phaser";
+import {
+  Scene,
+  GameObjects
+} from "phaser";
 
 import {
-  KeyBattleMenu,
   KeyHealthBar,
   KeyImage,
   KeyMonster,
@@ -9,9 +11,11 @@ import {
 } from "../keys";
 import { SceneUtil } from "../services";
 import { IImage } from "../types";
+import { MainPanelUi } from "../ui/battle";
 
 export class BattleScene extends Scene {
   private readonly sceneUtil = SceneUtil;
+  private uiMainPanel!: MainPanelUi;
 
   constructor() {
     super(KeyScene.BATTLE);
@@ -21,7 +25,7 @@ export class BattleScene extends Scene {
     this.renderBackground();
     this.renderMonsters();
     this.renderHealthBar();
-    this.renderInfoPanel();
+    this.renderPanel();
   }
 
   private renderBackground() {
@@ -114,59 +118,7 @@ export class BattleScene extends Scene {
     ]);
   }
 
-  private renderInfoPanel() {
-    this.createMainInfoPanel();
-    this.add.container(520, 448, [
-      this.createSubInfoPanel(),
-      this.add.text(55,22, KeyBattleMenu.FIGHT, this.getOptionTextSubPanel({ color: '#000000', fontSize: '30px' })),
-      this.add.text(240,22, KeyBattleMenu.SWITCH, this.getOptionTextSubPanel({ color: '#000000', fontSize: '30px' })),
-      this.add.text(55,70, KeyBattleMenu.ITEM, this.getOptionTextSubPanel({ color: '#000000', fontSize: '30px' })),
-      this.add.text(240,70, KeyBattleMenu.FLEE, this.getOptionTextSubPanel({ color: '#000000', fontSize: '30px' }))
-    ]);
-
-    this.add.container(0, 448, [
-      this.add.text(55,22, 'slash', this.getOptionTextSubPanel({ color: '#000000', fontSize: '30px' })),
-      this.add.text(240,22, 'growl', this.getOptionTextSubPanel({ color: '#000000', fontSize: '30px' })),
-      this.add.text(55,70, '-', this.getOptionTextSubPanel({ color: '#000000', fontSize: '30px' })),
-      this.add.text(240,70, '-', this.getOptionTextSubPanel({ color: '#000000', fontSize: '30px' })),
-    ])
-  }
-
-  private createMainInfoPanel() {
-    const padding = 4;
-    const rectHeight = 124;
-    this.add.rectangle(
-      padding,
-      this.scale.height - rectHeight - padding,
-        this.scale.width - (padding * 2),
-        rectHeight,
-      0xede4f3,
-      1
-    )
-      .setOrigin(0)
-      .setStrokeStyle(8, 0xe4434a, 1);
-  }
-
-  private createSubInfoPanel() {
-    const rectWight = 500;
-    const rectHeight = 124;
-    return  this.add.rectangle(
-      0,
-      0,
-      rectWight,
-      rectHeight,
-      0xede4f3,
-      1
-    )
-      .setOrigin(0)
-      .setStrokeStyle(8, 0x905ac2, 1);
-  }
-
-  private getOptionTextSubPanel(option: { color: string;  fontSize: string}) {
-    const { color, fontSize} = option;
-    return {
-      color,
-      fontSize
-    }
+  private renderPanel() {
+    this.uiMainPanel = new MainPanelUi(this);
   }
 }
