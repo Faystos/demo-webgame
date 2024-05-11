@@ -3,7 +3,11 @@ import {
   GameObjects
 } from "phaser";
 
-import {KeyBattleMenu, KeyMonster} from "../../keys";
+import {
+  KeyBattleMenu,
+  KeyMonster
+} from "../../keys";
+import { Direction } from "../../types";
 
 export class MainPanelUi {
   private scene!: Scene;
@@ -36,6 +40,24 @@ export class MainPanelUi {
   isShowBattleText(state: 0 | 1) {
     this.battleTextGameObjectLine1.setAlpha(state);
     this.battleTextGameObjectLine2.setAlpha(state);
+  }
+
+  handlePlayerInput(input: 'OK' | 'CANSEL') {
+    if (input === 'OK') {
+      this.isShowMainBattleMenu(1);
+      this.isShowBattleText(0);
+      this.isShowAttackMenu(0);
+      return;
+    }
+    if (input === 'CANSEL') {
+      this.isShowMainBattleMenu(0);
+      this.isShowBattleText(1);
+      this.isShowAttackMenu(1);
+    }
+  }
+
+  handleInputDirection(direction: Direction) {
+    console.log('direction: ', direction);
   }
 
   private renderInfoPanel() {
