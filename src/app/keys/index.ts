@@ -4,6 +4,7 @@ import { KeyHealthBar } from './key-health-bar';
 import { KeyMonster } from './key-monster';
 import { KeyScene } from './key-scene';
 import { KeyBattleMenu } from './key-battle-menu';
+import { KeyCursor } from './key-cursor';
 
 export {
   KeyAssets,
@@ -11,5 +12,6 @@ export {
   KeyHealthBar,
   KeyMonster,
   KeyScene,
-  KeyBattleMenu
+  KeyBattleMenu,
+  KeyCursor
 }
