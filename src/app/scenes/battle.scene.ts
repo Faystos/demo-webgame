@@ -168,7 +168,6 @@ export class BattleScene extends Scene {
 
     if (selectedDirection !== Direction.NONE) {
       this.uiMainPanel.handleInputDirection(selectedDirection);
-      this.uiMainPanel.moveMainBattleMenuCursor();
     }
   }
 }

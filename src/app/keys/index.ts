@@ -5,6 +5,8 @@ import { KeyMonster } from './key-monster';
 import { KeyScene } from './key-scene';
 import { KeyBattleMenu } from './key-battle-menu';
 import { KeyCursor } from './key-cursor';
+import { KeyAttackOption } from  './key-attack-option';
+import { KeyActiveBattleMenu } from './key-active-battle-menu';
 
 export {
   KeyAssets,
@@ -13,5 +15,7 @@ export {
   KeyMonster,
   KeyScene,
   KeyBattleMenu,
-  KeyCursor
+  KeyCursor,
+  KeyAttackOption,
+  KeyActiveBattleMenu
 }
