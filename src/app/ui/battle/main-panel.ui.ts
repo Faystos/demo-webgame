@@ -54,15 +54,12 @@ export class MainPanelUi {
 
   handlePlayerInput(input: 'OK' | 'CANSEL') {
     if (input === 'OK') {
-      this.isShowAttackMenu(1);
-      this.isShowBattleText(0);
-      this.isShowMainBattleMenu(0);
+      this.switchToBattleMeinMenu();
       return;
     }
     if (input === 'CANSEL') {
-      this.isShowAttackMenu(0);
-      this.isShowMainBattleMenu(1);
-      this.isShowBattleText(1);
+      this.goToMainMenu();
+      return;
     }
   }
 
@@ -284,4 +281,58 @@ export class MainPanelUi {
   private getMenuCursor() {
     return this.scene.add.image(42, 38, KeyCursor.CURSOR, 0).setOrigin(0.5).setScale(2.5);
   }
+
+  //Переходы на главном меню
+  private goToMainMenu() {
+    this.isShowAttackMenu(0);
+    this.isShowMainBattleMenu(1);
+    this.isShowBattleText(1);
+  }
+
+  private goToAttackMenu() {
+    this.isShowAttackMenu(1);
+    this.isShowBattleText(0);
+    this.isShowMainBattleMenu(0);
+  }
+
+  private goToSwitchMenu() {
+    console.log('goToSwitchMenu');
+  }
+
+  private goToFleeMenu() {
+    console.log('goToFleeMenu');
+  }
+
+  private goToItemMenu() {
+    console.log('goToItemMenu');
+  }
+
+  private switchToMainMenu(): void {
+    this.createBattleMenuObject()[this.selectedBattleMenuOption]();
+  }
+
+  private switchToBattleMeinMenu() {
+    this.createActiveBattleObject()[this.activeBattleMenu]();
+  }
+
+  private createBattleMenuObject() {
+    return {
+      [KeyBattleMenu.FIGHT]:  () =>this.goToAttackMenu(),
+      [KeyBattleMenu.SWITCH]: () => this.goToSwitchMenu(),
+      [KeyBattleMenu.FLEE]:   () => this.goToFleeMenu(),
+      [KeyBattleMenu.ITEM]:   () => this.goToItemMenu()
+    }
+  }
+
+  private createActiveBattleObject() {
+    return {
+      [KeyActiveBattleMenu.BATTLE_MAIN]:        ()=> this.switchToMainMenu(),
+      [KeyActiveBattleMenu.BATTLE_ITEM]:        () => console.log('BATTLE_ITEM'),
+      [KeyActiveBattleMenu.BATTLE_SWITCH]:      () => console.log('BATTLE_SWITCH') ,
+      [KeyActiveBattleMenu.BATTLE_FLEE]:        ()=> console.log('BATTLE_FLEE'),
+      [KeyActiveBattleMenu.BATTLE_MOVE_SELECT]: () => console.log('BATTLE_MOVE_SELECT') ,
+    }
+  }
+
+
 }
