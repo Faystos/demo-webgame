@@ -28,6 +28,10 @@ export class MainPanelUi {
 
   private activeBattleMenu = KeyActiveBattleMenu.BATTLE_MAIN;
 
+  private queuedInfoPanelMessages: string[] = [];
+  private queuedInfoPanelCallBack: (() => void) | undefined = undefined;
+  private waitingForPlayerInput = false;
+
   constructor(scene: Scene) {
     this.scene = scene;
     this.renderInfoPanel();
@@ -48,11 +52,16 @@ export class MainPanelUi {
   }
 
   isShowBattleText(state: 0 | 1) {
-    this.battleTextGameObjectLine1.setAlpha(state);
-    this.battleTextGameObjectLine2.setAlpha(state);
+    this.battleTextGameObjectLine1.setText('what should').setAlpha(state);
+    this.battleTextGameObjectLine2.setText(`${KeyMonster.IGUANIGNITE} do next`).setAlpha(state);
   }
 
   handlePlayerInput(input: 'OK' | 'CANSEL') {
+    if (this.waitingForPlayerInput && (input === 'CANSEL' || input === 'OK')) {
+      this.updateInfoPanelWaitMessage();
+      return;
+    }
+
     if (input === 'OK') {
       this.switchToBattleMeinMenu();
       return;
@@ -66,6 +75,30 @@ export class MainPanelUi {
   handleInputDirection(direction: Direction) {
     this.initBattleMenuOption(direction);
     this.initAttackOption(direction);
+  }
+
+  updateInfoPanelMessagesAndWaitForInput(messages: string[], callBack?: ()=> void) {
+    this.queuedInfoPanelMessages = messages;
+    this.queuedInfoPanelCallBack = callBack;
+
+    this.updateInfoPanelWaitMessage();
+  }
+
+  private updateInfoPanelWaitMessage() {
+    this.waitingForPlayerInput = false;
+    this.battleTextGameObjectLine1.setText('').setAlpha(1);
+
+    if (!this.queuedInfoPanelMessages.length) {
+      if (this.queuedInfoPanelCallBack !== undefined) {
+        this.queuedInfoPanelCallBack();
+        this.queuedInfoPanelCallBack = undefined;
+      }
+      return;
+    }
+
+    const messageToDisplay = this.queuedInfoPanelMessages.shift();
+    this.battleTextGameObjectLine1.setText(messageToDisplay as string);
+    this.waitingForPlayerInput = true;
   }
 
   private initBattleMenuOption(direction: Direction) {
@@ -296,15 +329,26 @@ export class MainPanelUi {
   }
 
   private goToSwitchMenu() {
-    console.log('goToSwitchMenu');
+    this.toggleMainBattleMenu(['You have no other monsters in your party...']);
   }
 
   private goToFleeMenu() {
-    console.log('goToFleeMenu');
+    this.toggleMainBattleMenu(['You fail to run away...']);
   }
 
   private goToItemMenu() {
-    console.log('goToItemMenu');
+    this.toggleMainBattleMenu(['Your bag is empty...']);
+  }
+
+  private toggleMainBattleMenu(message: string[]) {
+    this.isShowBattleText(0);
+    this.isShowMainBattleMenu(0);
+
+    this.updateInfoPanelMessagesAndWaitForInput(message, () => {
+      this.goToMainMenu();
+    });
+
+    return;
   }
 
   private switchToMainMenu(): void {
@@ -326,13 +370,11 @@ export class MainPanelUi {
 
   private createActiveBattleObject() {
     return {
-      [KeyActiveBattleMenu.BATTLE_MAIN]:        ()=> this.switchToMainMenu(),
+      [KeyActiveBattleMenu.BATTLE_MAIN]:        () => this.switchToMainMenu(),
       [KeyActiveBattleMenu.BATTLE_ITEM]:        () => console.log('BATTLE_ITEM'),
-      [KeyActiveBattleMenu.BATTLE_SWITCH]:      () => console.log('BATTLE_SWITCH') ,
-      [KeyActiveBattleMenu.BATTLE_FLEE]:        ()=> console.log('BATTLE_FLEE'),
+      [KeyActiveBattleMenu.BATTLE_SWITCH]:      () => console.log('BATTLE_SWITCH'),
+      [KeyActiveBattleMenu.BATTLE_FLEE]:        () => console.log('BATTLE_FLEE'),
       [KeyActiveBattleMenu.BATTLE_MOVE_SELECT]: () => console.log('BATTLE_MOVE_SELECT') ,
     }
   }
-
-
 }
