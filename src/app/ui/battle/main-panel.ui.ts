@@ -351,12 +351,25 @@ export class MainPanelUi {
     return;
   }
 
+  private toggleAttackMenu(message?: string[]) {
+    this.isShowBattleText(0);
+    this.isShowAttackMenu(0);
+
+    this.updateInfoPanelMessagesAndWaitForInput(['Your monster attacks the enemy'],() => {
+      this.goToMainMenu();
+    })
+  }
+
   private switchToMainMenu(): void {
     this.createBattleMenuObject()[this.selectedBattleMenuOption]();
   }
 
   private switchToBattleMeinMenu() {
     this.createActiveBattleObject()[this.activeBattleMenu]();
+  }
+
+  private switchToAttackMenu() {
+    this.creatActiveAttackObject()[this.selectedAttackOption]();
   }
 
   private createBattleMenuObject() {
@@ -374,7 +387,17 @@ export class MainPanelUi {
       [KeyActiveBattleMenu.BATTLE_ITEM]:        () => console.log('BATTLE_ITEM'),
       [KeyActiveBattleMenu.BATTLE_SWITCH]:      () => console.log('BATTLE_SWITCH'),
       [KeyActiveBattleMenu.BATTLE_FLEE]:        () => console.log('BATTLE_FLEE'),
-      [KeyActiveBattleMenu.BATTLE_MOVE_SELECT]: () => console.log('BATTLE_MOVE_SELECT') ,
+      [KeyActiveBattleMenu.BATTLE_MOVE_SELECT]: () => this.switchToAttackMenu(),
     }
   }
+
+  private creatActiveAttackObject() {
+    return {
+      [KeyAttackOption.MOVE_1]: () => this.toggleAttackMenu(),
+      [KeyAttackOption.MOVE_2]: () => this.toggleAttackMenu(),
+      [KeyAttackOption.MOVE_3]: () => this.toggleAttackMenu(),
+      [KeyAttackOption.MOVE_4]: () => this.toggleAttackMenu(),
+    }
+  }
+
 }
