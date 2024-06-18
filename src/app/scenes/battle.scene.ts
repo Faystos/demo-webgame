@@ -7,19 +7,25 @@ import {
 import {
   KeyImage,
   KeyMonster,
+  KeyPerson,
   KeyScene
 } from "../keys";
-import { SceneUtil } from "../services";
 import {
   Direction,
   IImage
 } from "../types";
-import { HealthBarUi, MainPanelUi } from "../ui/battle";
+
+import {
+  HealthBarUi,
+  MainPanelUi
+} from "../ui/battle";
+import { SceneUtil } from "../services";
 
 export class BattleScene extends Scene {
   private readonly sceneUtil = SceneUtil;
   private uiMainPanel!: MainPanelUi;
-  private uiHealthBar!: HealthBarUi;
+  private uiHealthBarPlayer: HealthBarUi = new HealthBarUi(this);
+  private uiHealthBarEnemy: HealthBarUi= new HealthBarUi(this);
   private cursorKeys!: Types.Input.Keyboard.CursorKeys;
 
   constructor() {
@@ -54,7 +60,8 @@ export class BattleScene extends Scene {
   }
 
   private renderHealthBar() {
-    this.uiHealthBar = new HealthBarUi(this);
+    this.uiHealthBarPlayer.renderHealthBar(KeyPerson.PLAYER);
+    this.uiHealthBarEnemy.renderHealthBar(KeyPerson.ENEMY)
   }
 
   private renderPanel() {
@@ -84,13 +91,13 @@ export class BattleScene extends Scene {
     let selectedDirection: Direction = Direction.NONE;
 
     if(this.cursorKeys.down.isDown) {
-      selectedDirection = Direction.DOWN
+      selectedDirection = Direction.DOWN;
     } else if(this.cursorKeys.up.isDown) {
-      selectedDirection = Direction.UP
+      selectedDirection = Direction.UP;
     } else if(this.cursorKeys.left.isDown) {
-      selectedDirection = Direction.LEFT
+      selectedDirection = Direction.LEFT;
     } else if(this.cursorKeys.right.isDown) {
-      selectedDirection = Direction.RIGHT
+      selectedDirection = Direction.RIGHT;
     }
 
     if (selectedDirection !== Direction.NONE) {

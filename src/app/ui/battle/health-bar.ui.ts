@@ -8,21 +8,40 @@ import { SceneUtil } from "../../services";
 import {
   KeyHealthBar,
   KeyImage,
-  KeyMonster
+  KeyMonster,
+  KeyPerson
 } from "../../keys";
 
 export class HealthBarUi {
   private readonly scene!: Scene;
   private readonly sceneUtil = SceneUtil;
 
+  private fullWidth = 360;
+  private scaleY = 0.7;
+
+  private leftCap!: GameObjects.Image;
+  private middleCap!: GameObjects.Image;
+  private rightCap!: GameObjects.Image;
+
   constructor(scene: Scene) {
     this.scene = scene;
-    this.renderHealthBar();
   }
 
-  private renderHealthBar() {
-    this.createHealthBar({ text: KeyMonster.IGUANIGNITE, x: 556, y: 318, enemy: false });
-    this.createHealthBar({ text: KeyMonster.CARNODUSK, x: 0, y: 0, enemy: true });
+  public renderHealthBar(person: KeyPerson) {
+    this.getPersonHealthBar()[person]();
+    this.setMeterPercentage(1);
+  }
+
+  public setMeterPercentage(percent = 1) {
+    this.middleCap.displayWidth = this.fullWidth * percent;
+    this.rightCap.x = this.middleCap.x + this.middleCap.displayWidth;
+  }
+
+  private getPersonHealthBar(): { [key in KeyPerson]: ()=> void } {
+    return {
+      [KeyPerson.PLAYER]: () => this.createHealthBar({ text: KeyMonster.IGUANIGNITE, x: 556, y: 318, enemy: false }),
+      [KeyPerson.ENEMY]: () => this.createHealthBar({ text: KeyMonster.CARNODUSK, x: 0, y: 0, enemy: true })
+    };
   }
 
   private createHealthBar(objHealthBar: { text: string, x: number, y: number, enemy: boolean }) {
@@ -60,34 +79,31 @@ export class HealthBarUi {
   }
 
   private createHealth(x: number, y: number) {
-    const scaleY = 0.7;
-
-    const healthLeft = this.sceneUtil.getDynamicImage({
+    this.leftCap = this.sceneUtil.getDynamicImage({
       scene: this.scene, x, y, key: KeyHealthBar.LEFT_CAP
     }).setOrigin(0, .5)
-      .setScale(1, scaleY);
+      .setScale(1, this.scaleY);
 
-    const middleLeft = this.sceneUtil.getDynamicImage({
+    this.middleCap = this.sceneUtil.getDynamicImage({
       scene: this.scene,
-      x: healthLeft.x + healthLeft.width,
+      x: this.leftCap.x + this.leftCap.width,
       y,
       key: KeyHealthBar.MIDDLE_CAP
     }).setOrigin(0, .5)
-      .setScale(1, scaleY);
-    middleLeft.displayWidth = 360;
+      .setScale(1, this.scaleY);
 
-    const rightLeft = this.sceneUtil.getDynamicImage({
+    this.rightCap = this.sceneUtil.getDynamicImage({
       scene: this.scene,
-      x: middleLeft.x + middleLeft.displayWidth,
+      x: this.middleCap.x + this.middleCap.displayWidth,
       y,
       key: KeyHealthBar.RIGHT_CAP
     }).setOrigin(0, .5)
-      .setScale(1, scaleY);
+      .setScale(1, this.scaleY);
 
     return this.scene.add.container(x, y, [
-      healthLeft,
-      middleLeft,
-      rightLeft
+      this.leftCap,
+      this.middleCap,
+      this.rightCap
     ]);
   }
 }

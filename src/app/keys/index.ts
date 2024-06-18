@@ -7,6 +7,7 @@ import { KeyBattleMenu } from './key-battle-menu';
 import { KeyCursor } from './key-cursor';
 import { KeyAttackOption } from  './key-attack-option';
 import { KeyActiveBattleMenu } from './key-active-battle-menu';
+import { KeyPerson } from './key-person';
 
 export {
   KeyAssets,
@@ -17,5 +18,6 @@ export {
   KeyBattleMenu,
   KeyCursor,
   KeyAttackOption,
-  KeyActiveBattleMenu
+  KeyActiveBattleMenu,
+  KeyPerson
 }
