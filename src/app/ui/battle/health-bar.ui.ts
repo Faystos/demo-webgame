@@ -32,7 +32,12 @@ export class HealthBarUi {
     this.setMeterPercentage(1);
   }
 
-  public setMeterPercentage(percent = 1) {
+  public setMeterPercentageAnimated(percent: number, options?: any) {
+    const width = this.fullWidth * percent;
+    this.addAnimatedHealthBar(width, options);
+  }
+
+  private setMeterPercentage(percent = 1) {
     this.middleCap.displayWidth = this.fullWidth * percent;
     this.rightCap.x = this.middleCap.x + this.middleCap.displayWidth;
   }
@@ -105,5 +110,22 @@ export class HealthBarUi {
       this.middleCap,
       this.rightCap
     ]);
+  }
+
+  private addAnimatedHealthBar(width: number, options?: any ) {
+    this.scene.tweens.add({
+      targets: this.middleCap,
+      displayWidth: width,
+      duration: options?.duration || 1000,
+      ease: Phaser.Math.Easing.Sine.Out,
+      onUpdate: () => {
+        this.rightCap.x = this.middleCap.x + this.middleCap.displayWidth;
+        const isVisible = this.middleCap.displayWidth > 0;
+        this.leftCap.visible = isVisible;
+        this.middleCap.visible = isVisible;
+        this.rightCap.visible = isVisible;
+      },
+      onComplete: options?.callback
+    });
   }
 }
