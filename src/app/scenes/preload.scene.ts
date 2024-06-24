@@ -59,6 +59,18 @@ export class PreloadScene extends Scene {
       KeyHealthBar.RIGHT_CAP,
       `${ KeyAssets.URI_KENNEYS_ASSETS }ui-space-expansion/barHorizontal_green_right.png`
     );
+    this.load.image(
+      KeyHealthBar.LEFT_CAP_SHADOW,
+      `${ KeyAssets.URI_KENNEYS_ASSETS }ui-space-expansion/barHorizontal_shadow_left.png`
+    );
+    this.load.image(
+      KeyHealthBar.MIDDLE_CAP_SHADOW,
+      `${ KeyAssets.URI_KENNEYS_ASSETS }ui-space-expansion/barHorizontal_shadow_mid.png`
+    );
+    this.load.image(
+      KeyHealthBar.RIGHT_CAP_SHADOW,
+      `${ KeyAssets.URI_KENNEYS_ASSETS }ui-space-expansion/barHorizontal_shadow_right.png`
+    );
   }
 
   private loadImageMonsters() {

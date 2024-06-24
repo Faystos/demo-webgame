@@ -38,6 +38,8 @@ export class BattleScene extends Scene {
     this.renderHealthBar();
     this.renderPanel();
     this.createCursorKeys();
+
+    this.uiHealthBarPlayer.setMeterPercentageAnimated(0.5)
   }
 
   override update() {

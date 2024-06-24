@@ -23,6 +23,10 @@ export class HealthBarUi {
   private middleCap!: GameObjects.Image;
   private rightCap!: GameObjects.Image;
 
+  private leftCapShadow!: GameObjects.Image;
+  private middleCapShadow!: GameObjects.Image;
+  private rightCapShadow!: GameObjects.Image;
+
   constructor(scene: Scene) {
     this.scene = scene;
   }
@@ -77,6 +81,7 @@ export class HealthBarUi {
     const containerChildren: GameObjects.GameObject[] = [
       bgHealthBar,
       this.createHealth(34, 34),
+      this.createHealthShadow(34, 34),
       ...textList
     ];
     // container
@@ -112,7 +117,38 @@ export class HealthBarUi {
     ]);
   }
 
-  private addAnimatedHealthBar(width: number, options?: any ) {
+  private createHealthShadow(x: number, y: number) {
+    this.leftCapShadow = this.sceneUtil.getDynamicImage({
+      scene: this.scene, x, y, key: KeyHealthBar.LEFT_CAP_SHADOW
+    }).setOrigin(0, .5)
+      .setScale(1, this.scaleY);
+
+    this.middleCapShadow = this.sceneUtil.getDynamicImage({
+      scene: this.scene,
+      x: this.leftCapShadow.x + this.leftCapShadow.width,
+      y,
+      key: KeyHealthBar.MIDDLE_CAP_SHADOW
+    }).setOrigin(0, .5)
+      .setScale(1, this.scaleY);
+
+    this.middleCapShadow.displayWidth = this.fullWidth;
+
+    this.rightCapShadow = this.sceneUtil.getDynamicImage({
+      scene: this.scene,
+      x: this.middleCapShadow.x + this.middleCapShadow.displayWidth,
+      y,
+      key: KeyHealthBar.RIGHT_CAP_SHADOW
+    }).setOrigin(0, .5)
+      .setScale(1, this.scaleY);
+
+    return this.scene.add.container(x, y, [
+      this.leftCapShadow,
+      this.middleCapShadow,
+      this.rightCapShadow
+    ]);
+  }
+
+  private addAnimatedHealthBar(width: number, options?: { duration?: number, callback?: () => void } ) {
     this.scene.tweens.add({
       targets: this.middleCap,
       displayWidth: width,
