@@ -4,6 +4,6 @@ export interface IImage {
   scene: Scene;
   x: number;
   y:number;
-  key: string;
+  assetKey: string;
   flip?: boolean
 }

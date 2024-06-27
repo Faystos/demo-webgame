@@ -75,8 +75,8 @@ export class HealthBarUi {
         healthPointText,
       ];
     // background image
-    const bgHealthBar = !enemy ? this.sceneUtil.getStaticImage({ scene: this.scene, x: 0, y:0, key: KeyImage.BG_HEALTH_BAR}) :
-      this.sceneUtil.getStaticImage({ scene: this.scene, x: 0, y:0, key: KeyImage.BG_HEALTH_BAR}).setScale(1, .8);
+    const bgHealthBar = !enemy ? this.sceneUtil.getStaticImage({ scene: this.scene, x: 0, y:0, assetKey: KeyImage.BG_HEALTH_BAR}) :
+      this.sceneUtil.getStaticImage({ scene: this.scene, x: 0, y:0, assetKey: KeyImage.BG_HEALTH_BAR}).setScale(1, .8);
 
     const containerChildren: GameObjects.GameObject[] = [
       bgHealthBar,
@@ -90,7 +90,7 @@ export class HealthBarUi {
 
   private createHealth(x: number, y: number) {
     this.leftCap = this.sceneUtil.getDynamicImage({
-      scene: this.scene, x, y, key: KeyHealthBar.LEFT_CAP
+      scene: this.scene, x, y, assetKey: KeyHealthBar.LEFT_CAP
     }).setOrigin(0, .5)
       .setScale(1, this.scaleY);
 
@@ -98,7 +98,7 @@ export class HealthBarUi {
       scene: this.scene,
       x: this.leftCap.x + this.leftCap.width,
       y,
-      key: KeyHealthBar.MIDDLE_CAP
+      assetKey: KeyHealthBar.MIDDLE_CAP
     }).setOrigin(0, .5)
       .setScale(1, this.scaleY);
 
@@ -106,7 +106,7 @@ export class HealthBarUi {
       scene: this.scene,
       x: this.middleCap.x + this.middleCap.displayWidth,
       y,
-      key: KeyHealthBar.RIGHT_CAP
+      assetKey: KeyHealthBar.RIGHT_CAP
     }).setOrigin(0, .5)
       .setScale(1, this.scaleY);
 
@@ -119,7 +119,7 @@ export class HealthBarUi {
 
   private createHealthShadow(x: number, y: number) {
     this.leftCapShadow = this.sceneUtil.getDynamicImage({
-      scene: this.scene, x, y, key: KeyHealthBar.LEFT_CAP_SHADOW
+      scene: this.scene, x, y, assetKey: KeyHealthBar.LEFT_CAP_SHADOW
     }).setOrigin(0, .5)
       .setScale(1, this.scaleY);
 
@@ -127,7 +127,7 @@ export class HealthBarUi {
       scene: this.scene,
       x: this.leftCapShadow.x + this.leftCapShadow.width,
       y,
-      key: KeyHealthBar.MIDDLE_CAP_SHADOW
+      assetKey: KeyHealthBar.MIDDLE_CAP_SHADOW
     }).setOrigin(0, .5)
       .setScale(1, this.scaleY);
 
@@ -137,7 +137,7 @@ export class HealthBarUi {
       scene: this.scene,
       x: this.middleCapShadow.x + this.middleCapShadow.displayWidth,
       y,
-      key: KeyHealthBar.RIGHT_CAP_SHADOW
+      assetKey: KeyHealthBar.RIGHT_CAP_SHADOW
     }).setOrigin(0, .5)
       .setScale(1, this.scaleY);
 

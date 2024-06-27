@@ -1,7 +1,15 @@
 import { IImage } from './image.type';
+import {
+  IBattleMonster,
+  IMonsterDetails
+} from './battle';
+
 import { Direction } from './direction.type';
+
 
 export {
   IImage,
-  Direction
+  IBattleMonster,
+  IMonsterDetails,
+  Direction,
 };

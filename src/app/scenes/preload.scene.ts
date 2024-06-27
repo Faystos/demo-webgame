@@ -98,7 +98,7 @@ export class PreloadScene extends Scene {
       scene: this,
       x: 0,
       y: 0,
-      key: KeyImage.BG_FOREST
+      assetKey: KeyImage.BG_FOREST
     });
   }
 }

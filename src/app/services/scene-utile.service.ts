@@ -1,31 +1,28 @@
+import { GameObjects } from "phaser";
+
 import { IImage } from "../types";
 import { KeyImage } from "../keys";
 
 class SceneUtilService {
   constructor() {}
 
-  addStaticImage(objStaticImage: IImage): void {
-    const { scene, x, y, key } = objStaticImage;
-    scene.add.image(x, y, key).setOrigin(0, 0);
+  public addStaticImage(objStaticImage: IImage): void {
+    const { scene, x, y, assetKey } = objStaticImage;
+    scene.add.image(x, y, assetKey).setOrigin(0, 0);
   }
 
-  addDynamicImage(objStaticImage: IImage): void {
-    const { scene, x, y, key , flip } = objStaticImage;
-    scene.add.image(x, y, key).setFlipX(flip ?? false);
-  }
-
-  addBackground(scene: Phaser.Scene, key: KeyImage): void {
+  public addBackground(scene: Phaser.Scene, key: KeyImage): void {
     scene.add.image(0, 0, key).setOrigin(0, 0)
   }
 
-  getStaticImage(objStaticImage: IImage) {
-    const { scene, x, y, key } = objStaticImage;
-    return scene.add.image(x, y, key).setOrigin(0, 0);
+  public getStaticImage(objStaticImage: IImage): GameObjects.Image {
+    const { scene, x, y, assetKey } = objStaticImage;
+    return scene.add.image(x, y, assetKey).setOrigin(0, 0);
   }
 
-  getDynamicImage(objStaticImage: IImage) {
-    const { scene, x, y, key , flip } = objStaticImage;
-    return scene.add.image(x, y, key).setFlipX(flip ?? false);
+  public getDynamicImage(objStaticImage: IImage): GameObjects.Image {
+    const { scene, x, y, assetKey , flip } = objStaticImage;
+    return scene.add.image(x, y, assetKey).setFlipX(flip ?? false);
   }
 }
 
