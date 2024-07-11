@@ -1,5 +1,6 @@
-import { BattleMonster } from "./monsters";
+import { BattleMonster, EnemyBattleMonster } from "./monsters";
 
 export {
-  BattleMonster
+  BattleMonster,
+  EnemyBattleMonster
 };

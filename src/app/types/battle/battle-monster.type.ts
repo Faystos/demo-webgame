@@ -1,17 +1,18 @@
 import { Scene } from "phaser";
+import { KeyMonster } from "../../keys";
 
 export interface IBattleMonster {
   scene: Scene;
   monsterDetails: IMonsterDetails;
-  position: {
+  position?: {
     x: number;
     y: number;
   }
 }
 
 export interface IMonsterDetails {
-  name: string;
-  assetKey: string;
+  name: KeyMonster;
+  assetKey: KeyMonster;
   assetFrame?: number;
   maxHP: number;
   currentHP: number;

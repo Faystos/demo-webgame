@@ -13,7 +13,10 @@ import { Direction } from "../types";
 
 import { MainPanelUi } from "../ui/battle";
 import { SceneUtil } from "../services";
-import { BattleMonster } from "../entities/battle";
+import {
+  BattleMonster,
+  EnemyBattleMonster
+} from "../entities/battle";
 
 export class BattleScene extends Scene {
   private readonly sceneUtil = SceneUtil;
@@ -44,24 +47,6 @@ export class BattleScene extends Scene {
     new BattleMonster({
       scene: this,
       monsterDetails: {
-        name: KeyMonster.CARNODUSK,
-        assetKey: KeyMonster.CARNODUSK,
-        assetFrame: 0,
-        currentHP: 25,
-        maxHP: 25,
-        baseAttack: 5,
-        attackIds: [],
-        isEnemy: false
-      },
-      position: {
-        x: 768,
-        y: 144
-      }
-    });
-
-    new BattleMonster({
-      scene: this,
-      monsterDetails: {
         name: KeyMonster.IGUANIGNITE,
         assetKey: KeyMonster.IGUANIGNITE,
         assetFrame: 0,
@@ -69,14 +54,30 @@ export class BattleScene extends Scene {
         maxHP: 25,
         baseAttack: 5,
         attackIds: [],
-        isEnemy: true,
+        isEnemy: false,
         flip: true
       },
       position: {
         x: 256,
         y: 316
       }
-    }).takeDamage();
+    });
+
+    new EnemyBattleMonster(
+      {
+        scene: this,
+        monsterDetails: {
+          name: KeyMonster.CARNODUSK,
+          assetKey: KeyMonster.CARNODUSK,
+          assetFrame: 0,
+          currentHP: 25,
+          maxHP: 25,
+          baseAttack: 5,
+          attackIds: [],
+          isEnemy: true
+        }
+      }
+    ).takeDamage(5);
   }
 
   private renderPanel() {

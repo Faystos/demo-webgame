@@ -31,8 +31,8 @@ export class HealthBarUi {
     this.scene = scene;
   }
 
-  public renderHealthBar(person: KeyPerson) {
-    this.getPersonHealthBar()[person]();
+  public renderHealthBar(person: KeyPerson, isEnemy: boolean, name: KeyMonster) {
+    this.getPersonHealthBar(isEnemy, name)[person]();
     this.setMeterPercentage(1);
   }
 
@@ -46,10 +46,14 @@ export class HealthBarUi {
     this.rightCap.x = this.middleCap.x + this.middleCap.displayWidth;
   }
 
-  private getPersonHealthBar(): { [key in KeyPerson]: ()=> void } {
+  private getPersonHealthBar(enemy: boolean, name: KeyMonster): { [key in KeyPerson]: ()=> void } {
+    const position = {
+      x: enemy ? 556 : 0,
+      y: enemy ? 318 : 0
+    }
     return {
-      [KeyPerson.PLAYER]: () => this.createHealthBar({ text: KeyMonster.IGUANIGNITE, x: 556, y: 318, enemy: false }),
-      [KeyPerson.ENEMY]: () => this.createHealthBar({ text: KeyMonster.CARNODUSK, x: 0, y: 0, enemy: true })
+      [KeyPerson.PLAYER]: () => this.createHealthBar({ text: name, x: position.x, y: position.y, enemy }),
+      [KeyPerson.ENEMY]: () => this.createHealthBar({ text: name, x: position.x, y: position.y, enemy })
     };
   }
 
@@ -62,7 +66,7 @@ export class HealthBarUi {
     const healthPointLevel = this.scene.add.text(443, 80, '25/25', { color: '#7E3D3F', fontSize: '16px' })
       .setOrigin(1, 0);
     // container children
-    const textList = !enemy ?
+    const textList = enemy ?
       [
         monsterName,
         monsterLevel,
@@ -75,7 +79,7 @@ export class HealthBarUi {
         healthPointText,
       ];
     // background image
-    const bgHealthBar = !enemy ? this.sceneUtil.getStaticImage({ scene: this.scene, x: 0, y:0, assetKey: KeyImage.BG_HEALTH_BAR}) :
+    const bgHealthBar = enemy ? this.sceneUtil.getStaticImage({ scene: this.scene, x: 0, y:0, assetKey: KeyImage.BG_HEALTH_BAR}) :
       this.sceneUtil.getStaticImage({ scene: this.scene, x: 0, y:0, assetKey: KeyImage.BG_HEALTH_BAR}).setScale(1, .8);
 
     const containerChildren: GameObjects.GameObject[] = [
