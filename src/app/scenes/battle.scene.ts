@@ -14,8 +14,8 @@ import { Direction } from "../types";
 import { MainPanelUi } from "../ui/battle";
 import { SceneUtil } from "../services";
 import {
-  BattleMonster,
-  EnemyBattleMonster
+  EnemyBattleMonster,
+  PlayerBattleMonster
 } from "../entities/battle";
 
 export class BattleScene extends Scene {
@@ -44,40 +44,8 @@ export class BattleScene extends Scene {
   }
 
   private renderMonsters() {
-    new BattleMonster({
-      scene: this,
-      monsterDetails: {
-        name: KeyMonster.IGUANIGNITE,
-        assetKey: KeyMonster.IGUANIGNITE,
-        assetFrame: 0,
-        currentHP: 25,
-        maxHP: 25,
-        baseAttack: 5,
-        attackIds: [],
-        isEnemy: false,
-        flip: true
-      },
-      position: {
-        x: 256,
-        y: 316
-      }
-    });
-
-    new EnemyBattleMonster(
-      {
-        scene: this,
-        monsterDetails: {
-          name: KeyMonster.CARNODUSK,
-          assetKey: KeyMonster.CARNODUSK,
-          assetFrame: 0,
-          currentHP: 25,
-          maxHP: 25,
-          baseAttack: 5,
-          attackIds: [],
-          isEnemy: true
-        }
-      }
-    ).takeDamage(5);
+    this.createPlayerMonster();
+    this.createEnemyMonster();
   }
 
   private renderPanel() {
@@ -119,5 +87,39 @@ export class BattleScene extends Scene {
     if (selectedDirection !== Direction.NONE) {
       this.uiMainPanel.handleInputDirection(selectedDirection);
     }
+  }
+
+  private createPlayerMonster() {
+    new PlayerBattleMonster({
+      scene: this,
+      monsterDetails: {
+        name: KeyMonster.IGUANIGNITE,
+        assetKey: KeyMonster.IGUANIGNITE,
+        assetFrame: 0,
+        currentHP: 25,
+        currentLevel: 1,
+        maxHP: 25,
+        baseAttack: 5,
+        attackIds: []
+      }
+    })
+  }
+
+  private createEnemyMonster() {
+    new EnemyBattleMonster(
+      {
+        scene: this,
+        monsterDetails: {
+          name: KeyMonster.CARNODUSK,
+          assetKey: KeyMonster.CARNODUSK,
+          assetFrame: 0,
+          currentHP: 25,
+          currentLevel: 1,
+          maxHP: 25,
+          baseAttack: 5,
+          attackIds: []
+        }
+      }
+    ).takeDamage(5);
   }
 }

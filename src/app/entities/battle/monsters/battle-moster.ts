@@ -4,12 +4,12 @@ import {
 } from "phaser";
 
 import {
-  IBattleMonster, IImage,
+  IBattleMonster,
+  IImage,
   IMonsterDetails
 } from "../../../types";
 import { SceneUtil } from "../../../services";
 import {
-  KeyMonster,
   KeyPerson
 } from "../../../keys";
 import { HealthBarUi } from "../../../ui/battle";
@@ -51,7 +51,7 @@ export class BattleMonster {
     this._monsterAttack = [];
 
     this.uiHealthBar = new HealthBarUi(this._scene);
-    this.renderHealthBar(this._monsterDetails.isEnemy, this._monsterDetails.name);
+    this.renderHealthBar(this._monsterDetails);
 
     this.createMonster({
       scene: this._scene,
@@ -73,8 +73,8 @@ export class BattleMonster {
     this._monster = this.sceneUtil.getDynamicImage({ scene, x, y, assetKey, flip });
   }
 
-  private renderHealthBar(isEnemy: boolean, name: KeyMonster): void {
-    const person: KeyPerson = isEnemy ? KeyPerson.ENEMY : KeyPerson.PLAYER;
-    this.uiHealthBar.renderHealthBar(person, isEnemy, name);
+  private renderHealthBar(config: IMonsterDetails): void {
+    const person: KeyPerson = config.isEnemy ? KeyPerson.ENEMY : KeyPerson.PLAYER;
+    this.uiHealthBar.renderHealthBar(person, config);
   }
 }

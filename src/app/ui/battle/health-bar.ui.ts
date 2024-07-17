@@ -8,9 +8,9 @@ import { SceneUtil } from "../../services";
 import {
   KeyHealthBar,
   KeyImage,
-  KeyMonster,
   KeyPerson
 } from "../../keys";
+import { IMonsterDetails } from "../../types";
 
 export class HealthBarUi {
   private readonly scene!: Scene;
@@ -31,8 +31,8 @@ export class HealthBarUi {
     this.scene = scene;
   }
 
-  public renderHealthBar(person: KeyPerson, isEnemy: boolean, name: KeyMonster) {
-    this.getPersonHealthBar(isEnemy, name)[person]();
+  public renderHealthBar(person: KeyPerson, config: IMonsterDetails) {
+    this.getPersonHealthBar(config)[person]();
     this.setMeterPercentage(1);
   }
 
@@ -46,27 +46,51 @@ export class HealthBarUi {
     this.rightCap.x = this.middleCap.x + this.middleCap.displayWidth;
   }
 
-  private getPersonHealthBar(enemy: boolean, name: KeyMonster): { [key in KeyPerson]: ()=> void } {
+  private getPersonHealthBar(config: IMonsterDetails): { [key in KeyPerson]: ()=> void } {
     const position = {
-      x: enemy ? 556 : 0,
-      y: enemy ? 318 : 0
+      x: config.isEnemy ? 556 : 0,
+      y: config.isEnemy ? 318 : 0
     }
     return {
-      [KeyPerson.PLAYER]: () => this.createHealthBar({ text: name, x: position.x, y: position.y, enemy }),
-      [KeyPerson.ENEMY]: () => this.createHealthBar({ text: name, x: position.x, y: position.y, enemy })
+      [KeyPerson.PLAYER]: () => this.createHealthBar({ text: config.name, x: position.x, y: position.y, config }),
+      [KeyPerson.ENEMY]: () => this.createHealthBar({ text: config.name, x: position.x, y: position.y, config })
     };
   }
 
-  private createHealthBar(objHealthBar: { text: string, x: number, y: number, enemy: boolean }) {
-    const { text, x, y , enemy} = objHealthBar;
+  private createHealthBar(objHealthBar: { text: string, x: number, y: number, config: IMonsterDetails }) {
+    const { text, x, y , config } = objHealthBar;
+
     // texts container
-    const monsterName = this.scene.add.text(30, 20, text, { color: '#7E3D3F', fontSize: '32px' });
-    const monsterLevel = this.scene.add.text(monsterName.width + 35, 23, 'L5', { color: '#ED474B', fontSize: '28px' });
-    const healthPointText = this.scene.add.text(30, 55, 'HP', { color: '#FF6505', fontSize: '24px', fontStyle: 'italic' });
-    const healthPointLevel = this.scene.add.text(443, 80, '25/25', { color: '#7E3D3F', fontSize: '16px' })
-      .setOrigin(1, 0);
+    const monsterName = this.scene.add.text(
+      30,
+      20,
+      text,
+      { color: '#7E3D3F', fontSize: '32px' }
+    );
+
+    const monsterLevel = this.scene.add.text(
+      monsterName.width + 35,
+      23,
+      `L${ config.currentLevel }`,
+      { color: '#ED474B', fontSize: '28px' }
+    );
+
+    const healthPointText = this.scene.add.text(
+      30,
+      55,
+      'HP',
+      { color: '#FF6505', fontSize: '24px', fontStyle: 'italic' }
+    );
+
+    const healthPointLevel = this.scene.add.text(
+      443,
+      80,
+      `${ config.currentHP }/${ config.maxHP }`,
+      { color: '#7E3D3F', fontSize: '16px' }
+    ).setOrigin(1, 0);
+
     // container children
-    const textList = enemy ?
+    const textList = config.isEnemy ?
       [
         monsterName,
         monsterLevel,
@@ -79,7 +103,7 @@ export class HealthBarUi {
         healthPointText,
       ];
     // background image
-    const bgHealthBar = enemy ? this.sceneUtil.getStaticImage({ scene: this.scene, x: 0, y:0, assetKey: KeyImage.BG_HEALTH_BAR}) :
+    const bgHealthBar = config.isEnemy ? this.sceneUtil.getStaticImage({ scene: this.scene, x: 0, y:0, assetKey: KeyImage.BG_HEALTH_BAR}) :
       this.sceneUtil.getStaticImage({ scene: this.scene, x: 0, y:0, assetKey: KeyImage.BG_HEALTH_BAR}).setScale(1, .8);
 
     const containerChildren: GameObjects.GameObject[] = [

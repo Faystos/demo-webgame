@@ -1,6 +1,11 @@
-import { BattleMonster, EnemyBattleMonster } from "./monsters";
+import {
+  BattleMonster,
+  PlayerBattleMonster,
+  EnemyBattleMonster
+} from "./monsters";
 
 export {
   BattleMonster,
+  PlayerBattleMonster,
   EnemyBattleMonster
 };

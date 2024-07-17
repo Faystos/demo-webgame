@@ -1,8 +1,23 @@
 import { BattleMonster } from "./battle-moster";
-import { IBattleMonster } from "../../../types";
+import { IEnemyBattleMonster } from "../../../types/battle/battle-monster.type";
 
-export class EnemyBattleMonster extends  BattleMonster{
-  constructor(config: IBattleMonster) {
-    super({ scene: config.scene, monsterDetails: config.monsterDetails, position: { x: 768, y: 144 } })
+const position = Object.freeze({
+  x: 768,
+  y: 144
+});
+
+export class EnemyBattleMonster extends  BattleMonster {
+  private static readonly isEnemy = true;
+
+  constructor(config: IEnemyBattleMonster) {
+    super({
+      scene: config.scene,
+      monsterDetails: {
+        ...config.monsterDetails,
+        flip: false,
+        isEnemy: EnemyBattleMonster.isEnemy
+      },
+      position
+    })
   }
 }
