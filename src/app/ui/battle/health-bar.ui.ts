@@ -27,6 +27,8 @@ export class HealthBarUi {
   private middleCapShadow!: GameObjects.Image;
   private rightCapShadow!: GameObjects.Image;
 
+  private healthPointLevel!: GameObjects.Text;
+
   constructor(scene: Scene) {
     this.scene = scene;
   }
@@ -41,6 +43,10 @@ export class HealthBarUi {
     this.addAnimatedHealthBar(width, options);
   }
 
+  public setHealthBarText(text: string) {
+    this.healthPointLevel.setText(text);
+  }
+
   private setMeterPercentage(percent = 1) {
     this.middleCap.displayWidth = this.fullWidth * percent;
     this.rightCap.x = this.middleCap.x + this.middleCap.displayWidth;
@@ -48,8 +54,8 @@ export class HealthBarUi {
 
   private getPersonHealthBar(config: IMonsterDetails): { [key in KeyPerson]: ()=> void } {
     const position = {
-      x: config.isEnemy ? 556 : 0,
-      y: config.isEnemy ? 318 : 0
+      x: !config.isEnemy ? 556 : 0,
+      y: !config.isEnemy ? 318 : 0
     }
     return {
       [KeyPerson.PLAYER]: () => this.createHealthBar({ text: config.name, x: position.x, y: position.y, config }),
@@ -82,7 +88,7 @@ export class HealthBarUi {
       { color: '#FF6505', fontSize: '24px', fontStyle: 'italic' }
     );
 
-    const healthPointLevel = this.scene.add.text(
+    this.healthPointLevel =  this.scene.add.text(
       443,
       80,
       `${ config.currentHP }/${ config.maxHP }`,
@@ -95,16 +101,17 @@ export class HealthBarUi {
         monsterName,
         monsterLevel,
         healthPointText,
-        healthPointLevel,
+        // this.healthPointLevel,
       ] :
       [
         monsterName,
         monsterLevel,
         healthPointText,
+        this.healthPointLevel,
       ];
     // background image
-    const bgHealthBar = config.isEnemy ? this.sceneUtil.getStaticImage({ scene: this.scene, x: 0, y:0, assetKey: KeyImage.BG_HEALTH_BAR}) :
-      this.sceneUtil.getStaticImage({ scene: this.scene, x: 0, y:0, assetKey: KeyImage.BG_HEALTH_BAR}).setScale(1, .8);
+    const bgHealthBar = config.isEnemy ? this.sceneUtil.getStaticImage({ scene: this.scene, x: 0, y:0, assetKey: KeyImage.BG_HEALTH_BAR}).setScale(1, .8) :
+      this.sceneUtil.getStaticImage({ scene: this.scene, x: 0, y:0, assetKey: KeyImage.BG_HEALTH_BAR})//.setScale(1, .8);
 
     const containerChildren: GameObjects.GameObject[] = [
       bgHealthBar,

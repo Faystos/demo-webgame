@@ -66,6 +66,7 @@ export class BattleMonster {
     this._currentHP -= damage;
     if (this._currentHP < 0) this._currentHP = 0;
     this.uiHealthBar.setMeterPercentageAnimated(this._currentHP / this._maxHP, { callback });
+    this.uiHealthBar.setHealthBarText(`${ this._currentHP }/${ this._maxHP }`);
   }
 
   private createMonster(obfMonster: IImage): void {

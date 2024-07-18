@@ -22,6 +22,8 @@ export class BattleScene extends Scene {
   private readonly sceneUtil = SceneUtil;
   private uiMainPanel!: MainPanelUi;
   private cursorKeys!: Types.Input.Keyboard.CursorKeys;
+  private playerBattleMonster!: PlayerBattleMonster;
+  private enemyBattleMonster!: EnemyBattleMonster;
 
   constructor() {
     super(KeyScene.BATTLE);
@@ -32,6 +34,8 @@ export class BattleScene extends Scene {
     this.renderMonsters();
     this.renderPanel();
     this.createCursorKeys();
+
+    this.playerBattleMonster.takeDamage(24);
   }
 
   override update() {
@@ -90,7 +94,7 @@ export class BattleScene extends Scene {
   }
 
   private createPlayerMonster() {
-    new PlayerBattleMonster({
+    this.playerBattleMonster = new PlayerBattleMonster({
       scene: this,
       monsterDetails: {
         name: KeyMonster.IGUANIGNITE,
@@ -102,11 +106,11 @@ export class BattleScene extends Scene {
         baseAttack: 5,
         attackIds: []
       }
-    })
+    });
   }
 
   private createEnemyMonster() {
-    new EnemyBattleMonster(
+    this.enemyBattleMonster = new EnemyBattleMonster(
       {
         scene: this,
         monsterDetails: {
@@ -120,6 +124,6 @@ export class BattleScene extends Scene {
           attackIds: []
         }
       }
-    ).takeDamage(5);
+    );
   }
 }
