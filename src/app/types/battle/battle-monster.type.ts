@@ -1,6 +1,13 @@
 import { Scene } from "phaser";
 import { KeyMonster } from "../../keys";
 
+export interface IBattleMonsterAttack {
+  id: number;
+  name: string;
+  animationName: string;
+  audioKey: string;
+}
+
 export interface IBattleMonster {
   scene: Scene;
   monsterDetails: IMonsterDetails;
@@ -32,7 +39,7 @@ interface IPlayerMonsterDetails {
   currentHP: number;
   currentLevel: number;
   baseAttack: number;
-  attackIds: string[];
+  attackIds: number[];
 }
 
 interface IEnemyMonsterDetails extends IPlayerMonsterDetails {}

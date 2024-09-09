@@ -15,7 +15,7 @@ import { MainPanelUi } from "../ui/battle";
 import { SceneUtil } from "../services";
 import {
   EnemyBattleMonster,
-  PlayerBattleMonster
+  PlayerBattleMonster,
 } from "../entities/battle";
 
 export class BattleScene extends Scene {
@@ -34,8 +34,6 @@ export class BattleScene extends Scene {
     this.renderMonsters();
     this.renderPanel();
     this.createCursorKeys();
-
-    this.playerBattleMonster.takeDamage(24);
   }
 
   override update() {
@@ -53,7 +51,7 @@ export class BattleScene extends Scene {
   }
 
   private renderPanel() {
-    this.uiMainPanel = new MainPanelUi(this);
+    this.uiMainPanel = new MainPanelUi(this, this.playerBattleMonster);
   }
 
   private createCursorKeys() {
@@ -66,6 +64,7 @@ export class BattleScene extends Scene {
 
     if (wasSpaceKeyPassed) {
       this.uiMainPanel.handlePlayerInput('OK');
+      this.handleBattleSequence()
       return;
     }
 
@@ -93,6 +92,32 @@ export class BattleScene extends Scene {
     }
   }
 
+  private handleBattleSequence() {
+    if (this.uiMainPanel.isPlayerAttack) this.playerAttack();
+
+  }
+
+  private playerAttack() {
+    this.uiMainPanel.updateInfoPanelMessagesAndWaitForInput([`${this.playerBattleMonster.name} used ${'sdf'}`], () => {
+      this.uiMainPanel.isPlayerAttack = false;
+      this.time.delayedCall(10, ()=> {
+        this.enemyBattleMonster.takeDamage(5, () => {
+          this.enemyAttack();
+        });
+      })
+    });
+  }
+
+  private enemyAttack() {
+    this.uiMainPanel.updateInfoPanelMessagesAndWaitForInput([`for ${this.enemyBattleMonster.name} used ${'sdf'}`], () => {
+      this.time.delayedCall(10, ()=> {
+        this.playerBattleMonster.takeDamage(5, () => {
+          this.uiMainPanel.goToMainMenu();
+        })
+      })
+    });
+  }
+
   private createPlayerMonster() {
     this.playerBattleMonster = new PlayerBattleMonster({
       scene: this,
@@ -104,7 +129,7 @@ export class BattleScene extends Scene {
         currentLevel: 1,
         maxHP: 25,
         baseAttack: 5,
-        attackIds: []
+        attackIds: [2]
       }
     });
   }
@@ -121,7 +146,7 @@ export class BattleScene extends Scene {
           currentLevel: 1,
           maxHP: 25,
           baseAttack: 5,
-          attackIds: []
+          attackIds: [1]
         }
       }
     );

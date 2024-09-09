@@ -1,9 +1,11 @@
 import {
   IBattleMonster,
-  IMonsterDetails
+  IMonsterDetails,
+  IBattleMonsterAttack
 } from './battle-monster.type';
 
 export {
   IBattleMonster,
-  IMonsterDetails
+  IMonsterDetails,
+  IBattleMonsterAttack
 };

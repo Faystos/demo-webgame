@@ -11,9 +11,11 @@ import {
   KeyMonster
 } from "../../keys";
 import { Direction } from "../../types";
+import { BattleMonster } from "../../entities/battle";
 
 export class MainPanelUi {
   private scene!: Scene;
+  private activeBattleMonster!: BattleMonster;
 
   private attackMenuGameObject!: GameObjects.Container;
   private battleTextGameObjectLine1!: GameObjects.Text;
@@ -32,8 +34,19 @@ export class MainPanelUi {
   private queuedInfoPanelCallBack: (() => void) | undefined = undefined;
   private waitingForPlayerInput = false;
 
-  constructor(scene: Scene) {
+  private isPlayerAttack$ = false;
+
+  set isPlayerAttack(value: boolean) {
+    this.isPlayerAttack$ = value;
+  }
+
+  get isPlayerAttack(): boolean {
+    return this.isPlayerAttack$;
+  }
+
+  constructor(scene: Scene, activeBattleMonster: BattleMonster) {
     this.scene = scene;
+    this.activeBattleMonster = activeBattleMonster;
     this.renderInfoPanel();
   }
 
@@ -53,7 +66,7 @@ export class MainPanelUi {
 
   isShowBattleText(state: 0 | 1) {
     this.battleTextGameObjectLine1.setText('what should').setAlpha(state);
-    this.battleTextGameObjectLine2.setText(`${KeyMonster.IGUANIGNITE} do next`).setAlpha(state);
+    this.battleTextGameObjectLine2.setText(`${this.activeBattleMonster.name} do next`).setAlpha(state);
   }
 
   handlePlayerInput(input: 'OK' | 'CANSEL') {
@@ -86,7 +99,7 @@ export class MainPanelUi {
 
   private updateInfoPanelWaitMessage() {
     this.waitingForPlayerInput = false;
-    this.battleTextGameObjectLine1.setText('').setAlpha(1);
+    this.battleTextGameObjectLine1.setText(this.queuedInfoPanelMessages).setAlpha(1);
 
     if (!this.queuedInfoPanelMessages.length) {
       if (this.queuedInfoPanelCallBack !== undefined) {
@@ -271,11 +284,13 @@ export class MainPanelUi {
     this.battleTextGameObjectLine1 = this.scene.add.text(20, 468, 'what should', this.getOptionTextSubPanel({ color: '#000000', fontSize: '30px' }));
     this.battleTextGameObjectLine2 = this.scene.add.text(20, 512, `${KeyMonster.IGUANIGNITE} do next`, this.getOptionTextSubPanel({ color: '#000000', fontSize: '30px' }));
 
+    const attackNames = this.createAttackNames();
+
     this.attackMenuGameObject= this.scene.add.container(0, 448, [
-      this.scene.add.text(55,22, 'slash', this.getOptionTextSubPanel({ color: '#000000', fontSize: '30px' })),
-      this.scene.add.text(240,22, 'growl', this.getOptionTextSubPanel({ color: '#000000', fontSize: '30px' })),
-      this.scene.add.text(55,70, '-', this.getOptionTextSubPanel({ color: '#000000', fontSize: '30px' })),
-      this.scene.add.text(240,70, '-', this.getOptionTextSubPanel({ color: '#000000', fontSize: '30px' })),
+      this.scene.add.text(55,22, attackNames[0], this.getOptionTextSubPanel({ color: '#000000', fontSize: '30px' })),
+      this.scene.add.text(240,22, attackNames[1], this.getOptionTextSubPanel({ color: '#000000', fontSize: '30px' })),
+      this.scene.add.text(55,70, attackNames[2], this.getOptionTextSubPanel({ color: '#000000', fontSize: '30px' })),
+      this.scene.add.text(240,70, attackNames[3], this.getOptionTextSubPanel({ color: '#000000', fontSize: '30px' })),
       this.attackBattleMenuCursorGameObject
     ]);
 
@@ -316,7 +331,7 @@ export class MainPanelUi {
   }
 
   //Переходы на главном меню
-  private goToMainMenu() {
+  public goToMainMenu() {
     this.isShowAttackMenu(0);
     this.isShowMainBattleMenu(1);
     this.isShowBattleText(1);
@@ -351,13 +366,12 @@ export class MainPanelUi {
     return;
   }
 
-  private toggleAttackMenu(message?: string[]) {
+  private toggleAttackMenu(message?: string[], callback?: () => void) {
     this.isShowBattleText(0);
     this.isShowAttackMenu(0);
+    this.isPlayerAttack$ = true;
 
-    this.updateInfoPanelMessagesAndWaitForInput(['Your monster attacks the enemy'],() => {
-      this.goToMainMenu();
-    })
+    if (callback) callback();
   }
 
   private switchToMainMenu(): void {
@@ -400,4 +414,11 @@ export class MainPanelUi {
     }
   }
 
+  private createAttackNames(): string[] {
+    const attackNames: string[] = [];
+    for (let i = 0; i < 4; i++) {
+      attackNames.push(this.activeBattleMonster.attacks[i]?.name || '-');
+    }
+    return attackNames;
+  }
 }

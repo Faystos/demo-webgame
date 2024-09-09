@@ -3,6 +3,7 @@ import { Scene } from "phaser";
 import {
   KeyAssets,
   KeyCursor,
+  KeyData,
   KeyHealthBar,
   KeyImage,
   KeyMonster,
@@ -19,6 +20,7 @@ export class PreloadScene extends Scene {
 
   preload() {
     this.loadImage();
+    this.loadData();
   }
 
   create() {
@@ -90,6 +92,13 @@ export class PreloadScene extends Scene {
     this.load.image(
       KeyCursor.CURSOR,
       `${ KeyAssets.URI_MONSTER_TAMER }ui/cursor.png`
+    )
+  }
+
+  private loadData() {
+    this.load.json(
+      KeyData.ATTACK,
+      `${KeyAssets.URI_DATA_ASSETS}/attacks.json`
     )
   }
 

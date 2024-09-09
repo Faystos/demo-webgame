@@ -10,9 +10,12 @@ import {
 } from "../../../types";
 import { SceneUtil } from "../../../services";
 import {
+  KeyData,
   KeyPerson
 } from "../../../keys";
 import { HealthBarUi } from "../../../ui/battle";
+import { IBattleMonsterAttack } from "../../../types/battle";
+
 
 export class BattleMonster {
   protected _scene!: Scene;
@@ -21,7 +24,7 @@ export class BattleMonster {
 
   protected _currentHP!: number;
   protected _maxHP!: number;
-  protected _monsterAttack!: number[];
+  protected _monsterAttack!: IBattleMonsterAttack[];
 
   private readonly sceneUtil = SceneUtil;
   private uiHealthBar!: HealthBarUi;
@@ -34,7 +37,7 @@ export class BattleMonster {
     return this._monsterDetails.name;
   }
 
-  get attacks(): number[] {
+  get attacks(): IBattleMonsterAttack[] {
     return [...this._monsterAttack];
   }
 
@@ -59,6 +62,14 @@ export class BattleMonster {
       y: config.position!.y as number,
       assetKey: this._monsterDetails.assetKey,
       flip: this._monsterDetails.flip
+    });
+
+    const dataMonsterAttack: IBattleMonsterAttack[] = this._scene.cache.json.get(KeyData.ATTACK);
+    this._monsterDetails.attackIds.forEach(attackId => {
+      const attack = dataMonsterAttack.find(({id}) => attackId === id);
+      if (attack) {
+        this._monsterAttack.push(attack);
+      }
     });
   }
 
