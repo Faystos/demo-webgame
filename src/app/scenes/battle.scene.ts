@@ -23,6 +23,7 @@ export class BattleScene extends Scene {
   private uiMainPanel!: MainPanelUi;
   private cursorKeys!: Types.Input.Keyboard.CursorKeys;
   private playerBattleMonster!: PlayerBattleMonster;
+  private activePlayerAttackIndex: number = -1;
   private enemyBattleMonster!: EnemyBattleMonster;
 
   constructor() {
@@ -64,6 +65,7 @@ export class BattleScene extends Scene {
 
     if (wasSpaceKeyPassed) {
       this.uiMainPanel.handlePlayerInput('OK');
+      this.activePlayerAttackIndex = this.uiMainPanel.selectedAttack;
       this.handleBattleSequence()
       return;
     }
@@ -98,9 +100,9 @@ export class BattleScene extends Scene {
   }
 
   private playerAttack() {
-    this.uiMainPanel.updateInfoPanelMessagesAndWaitForInput([`${this.playerBattleMonster.name} used ${'sdf'}`], () => {
+    this.uiMainPanel.updateInfoPanelMessagesAndWaitForInput([`${this.playerBattleMonster.name} used ${this.playerBattleMonster.attacks[this.activePlayerAttackIndex].name}`], () => {
       this.uiMainPanel.isPlayerAttack = false;
-      this.time.delayedCall(10, ()=> {
+      this.time.delayedCall(500, ()=> {
         this.enemyBattleMonster.takeDamage(5, () => {
           this.enemyAttack();
         });
@@ -109,7 +111,7 @@ export class BattleScene extends Scene {
   }
 
   private enemyAttack() {
-    this.uiMainPanel.updateInfoPanelMessagesAndWaitForInput([`for ${this.enemyBattleMonster.name} used ${'sdf'}`], () => {
+    this.uiMainPanel.updateInfoPanelMessagesAndWaitForInput([`for ${this.enemyBattleMonster.name} used ${this.enemyBattleMonster.attacks[0].name}`], () => {
       this.time.delayedCall(10, ()=> {
         this.playerBattleMonster.takeDamage(5, () => {
           this.uiMainPanel.goToMainMenu();
@@ -129,7 +131,7 @@ export class BattleScene extends Scene {
         currentLevel: 1,
         maxHP: 25,
         baseAttack: 5,
-        attackIds: [2]
+        attackIds: [2, 1]
       }
     });
   }

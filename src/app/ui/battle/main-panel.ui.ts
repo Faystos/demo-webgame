@@ -16,6 +16,7 @@ import { BattleMonster } from "../../entities/battle";
 export class MainPanelUi {
   private scene!: Scene;
   private activeBattleMonster!: BattleMonster;
+  private selectedAttackMonsterIndex!: number;
 
   private attackMenuGameObject!: GameObjects.Container;
   private battleTextGameObjectLine1!: GameObjects.Text;
@@ -26,7 +27,7 @@ export class MainPanelUi {
   private attackBattleMenuCursorGameObject!: GameObjects.Image;
 
   private selectedBattleMenuOption = KeyBattleMenu.FIGHT;
-  private selectedAttackOption = KeyAttackOption.MOVE_1;
+  private selectedAttackOption= KeyAttackOption.MOVE_1;
 
   private activeBattleMenu = KeyActiveBattleMenu.BATTLE_MAIN;
 
@@ -42,6 +43,10 @@ export class MainPanelUi {
 
   get isPlayerAttack(): boolean {
     return this.isPlayerAttack$;
+  }
+
+  get selectedAttack(): number {
+    return this.selectedAttackMonsterIndex;
   }
 
   constructor(scene: Scene, activeBattleMonster: BattleMonster) {
@@ -77,6 +82,7 @@ export class MainPanelUi {
 
     if (input === 'OK') {
       this.switchToBattleMeinMenu();
+      this.handlePlayerChooseAttack();
       return;
     }
     if (input === 'CANSEL') {
@@ -101,7 +107,7 @@ export class MainPanelUi {
     this.waitingForPlayerInput = false;
     this.battleTextGameObjectLine1.setText(this.queuedInfoPanelMessages).setAlpha(1);
 
-    if (!this.queuedInfoPanelMessages.length) {
+    if (this.queuedInfoPanelMessages.length) {
       if (this.queuedInfoPanelCallBack !== undefined) {
         this.queuedInfoPanelCallBack();
         this.queuedInfoPanelCallBack = undefined;
@@ -201,6 +207,28 @@ export class MainPanelUi {
         }
         return;
       default: return;
+    }
+  }
+
+  private handlePlayerChooseAttack() {
+    if (this.activeBattleMenu === KeyActiveBattleMenu.BATTLE_MOVE_SELECT) {
+      let selectedMoveIndex = 0;
+
+      switch (this.selectedAttackOption) {
+        case KeyAttackOption.MOVE_1:
+          selectedMoveIndex = 0;
+          break;
+        case KeyAttackOption.MOVE_2:
+          selectedMoveIndex = 1;
+          break;
+        case KeyAttackOption.MOVE_3:
+          selectedMoveIndex = 2;
+          break;
+        case KeyAttackOption.MOVE_4:
+          selectedMoveIndex = 3;
+          break;
+      }
+      this.selectedAttackMonsterIndex = selectedMoveIndex;
     }
   }
 
